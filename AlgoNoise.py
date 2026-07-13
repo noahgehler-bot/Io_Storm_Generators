@@ -19,7 +19,7 @@ def generate_noise_bursts(spec, freq_grid, dt=0.1, duration=900, center_freq=20e
 
         burst_freq = np.random.choice(n_freq, p=freq_weight/freq_weight.sum())
 
-        amp = np.random.exponential(20)
+        amp = np.random.exponential(20) # controls magnitude of bursts
 
         sigma_t = np.random.uniform(1,15)   # uniform distribution across the range
         sigma_f = np.random.uniform(1,6)
@@ -62,15 +62,17 @@ def generate_noise():
         d = c + 50 # thickness of the line
 
 
-        if np.random.rand() < 0.35: # random sin function with in ranges for intensity
+        if np.random.rand() < 0.35: # random sin function within ranges for intensity
             spec[a:b, :] += np.random.randint(2,7) + 8 * np.sin(np.random.randint(2, 5) * t)
 
-        if np.random.rand() < 0.35: # random sin function with in ranges for intensity
+        if np.random.rand() < 0.35: # random sin function within ranges for intensity
             spec[c:d, :] += np.random.randint(2,7) + 8 * np.sin(np.random.randint(2, 5) * t)
 
     plt.ylim(17000,24000)   # plot range of 17000-24000
 
     plt.imshow(spec, origin = 'lower', aspect = 'auto')
+    plt.xlabel('Time (s)')
+    plt.ylabel('Frequency (kHz)')
     plt.title('Noise')
     plt.colorbar()
     plt.show()
