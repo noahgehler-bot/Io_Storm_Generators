@@ -19,7 +19,7 @@ def generate_io_a(spec, freq_grid, dt=0.1, duration=900, center_freq=20e6, width
 
         burst_freq = np.random.choice(n_freq, p=freq_weight/freq_weight.sum())
 
-        amp = np.random.exponential(20)
+        amp = np.random.exponential(20) # controls the magnitude of the bursts
 
         sigma_t = np.random.uniform(1,15)   # uniform distribution across the range
         sigma_f = np.random.uniform(1,6)
@@ -58,7 +58,6 @@ def generate_noise():
     print('Scaling is multiplied by a factor of', factor)   # printing the factor
     t = np.random.randint(100, 200) # storm starts randomly in the range on the x axis
     s = np.random.randint(500, 600)  # using s as a cut off point
-    # length of the bar along y axis
     y = np.random.randint(15000, 17000) # storm starts randomly in the range on y axis
     for k in range(300):    # the bars increase in size
         x = np.random.randint(t,t + 5)  # picks a starting point for the bar on the x axis
@@ -73,7 +72,8 @@ def generate_noise():
 
 
         # choose local extents
-        # set range for max/min values of x and y
+        # controls the variable intensity of the bars
+
         h = d + f
         w = 2 * p
         ymin = max(0, b - int(d))
@@ -98,7 +98,6 @@ def generate_noise():
            break
 
     for w in range(100):    # bars start to decrease in size
-        # same things as the increasing section but -= instead of += to decrease the bar size
         d = np.random.randint(15, 40) * factor  # changes the lower step length of the line
         f = np.random.randint(25, 40) * factor  # changes the upper step length of the line
         x = np.random.randint(t, t + 5)
@@ -151,6 +150,8 @@ def generate_noise():
     plt.ylim(15000,24000)   # plot range of 17000-24000
 
     plt.imshow(spec, origin = 'lower', aspect = 'auto')
+    plt.xlabel('Time (s)')
+    plt.ylabel('Frequency (kHz)')
     plt.title(f'Io-D: Factor {factor}')
     plt.colorbar()
     plt.show()
