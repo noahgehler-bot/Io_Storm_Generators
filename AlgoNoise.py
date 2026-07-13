@@ -19,7 +19,7 @@ def generate_noise_bursts(spec, freq_grid, dt=0.1, duration=900, center_freq=20e
 
         burst_freq = np.random.choice(n_freq, p=freq_weight/freq_weight.sum())
 
-        amp = np.random.exponential(4)
+        amp = np.random.exponential(20)
 
         sigma_t = np.random.uniform(1,15)   # uniform distribution across the range
         sigma_f = np.random.uniform(1,6)
@@ -50,7 +50,7 @@ def generate_noise():
         y = np.random.randint(17000,24000)
         x = np.random.randint(0,1000)
 
-        spec[y-13:y+27, x-1:x+2] += 15 # -13:+27 and -1:+2 dictate the size of the specs
+        spec[y-13:y+27, x-1:x+2] += 50 # -13:+27 and -1:+2 dictate the size of the specs
 
     for j in range(0, 3): # generates up to three radio signal lines
         t = np.arange(1000) * 0.1
@@ -63,10 +63,10 @@ def generate_noise():
 
 
         if np.random.rand() < 0.35: # random sin function with in ranges for intensity
-            spec[a:b, :] += np.random.randint(2,7) + np.sin(np.random.randint(2, 5) * t)
+            spec[a:b, :] += np.random.randint(2,7) + 8 * np.sin(np.random.randint(2, 5) * t)
 
         if np.random.rand() < 0.35: # random sin function with in ranges for intensity
-            spec[c:d, :] += np.random.randint(2,7) + np.sin(np.random.randint(2, 5) * t)
+            spec[c:d, :] += np.random.randint(2,7) + 8 * np.sin(np.random.randint(2, 5) * t)
 
     plt.ylim(17000,24000)   # plot range of 17000-24000
 
