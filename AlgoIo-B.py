@@ -19,7 +19,7 @@ def generate_io_b(spec, freq_grid, dt=0.1, duration=900, center_freq=20e6, width
 
         burst_freq = np.random.choice(n_freq, p=freq_weight/freq_weight.sum())
 
-        amp = np.random.exponential(20)
+        amp = np.random.exponential(20) # controls the magnitude of the bursts
 
         sigma_t = np.random.uniform(1,15)   # uniform distribution across the range
         sigma_f = np.random.uniform(1,6)
@@ -57,23 +57,17 @@ def generate_noise():
     factor = np.random.randint(20,31) # random factor to give different sizes of the storm
     print('Scaling is multiplied by a factor of', factor)   # printing the factor
     t = np.random.randint(100, 200) # storm starts randomly in the range on the x axis
-    #s = np.random.randint(0, 1000)  # using s as a cut off point
-    # d = 60 * factor
-    # f = 60 * factor
     y = np.random.randint(19000, 21000) # storm starts randomly in the range on y axis
     for k in range(100):    # the bars increase in size
         x = np.random.randint(t,t + 5)  # picks a starting point for the bar on the x axis
         t += np.random.randint(5, 50)  # each bar moves over a random amount on the x axis
         p = np.random.randint(4, 15)   # thickness of the bar
-        # length of the bar along y axis
         d = np.random.randint(60, 200) * factor # changes the lower step length of the line
         f = np.random.randint(60, 200) * factor    # changes the upper step length of the line
-        #s += np.random.randint(30, 60)  # increase in the cut off point
-        # l = np.random.randint(5, 10)
-        # y += np.random.randint(l, l + 10)   # adds upward trend to the bars
         b = np.random.randint(y - 75, y + 75)   # adds randomization
 
         # choose local extents
+        # controls the variable intensity of the bars
         h = d + f
         w = 2 * p
         ymin = max(0, b - int(d))
@@ -96,49 +90,6 @@ def generate_noise():
         spec[ymin:ymax, xmin:xmax] += 30.0 * gauss  # tune amplitude
 
 
-        # if s > 2000:    # bars stop increasing
-        #    break
-
-    # for w in range(100):    # bars start to decrease in size
-    #     # same things as the increasing section but -= instead of += to decrease the bar size
-    #     d -= 10 * factor
-    #     f -= 40 * factor
-    #     x = np.random.randint(t, t + 5)
-    #     t += np.random.randint(5, 30)
-    #     p = np.random.randint(1, 8)
-    #     l = np.random.randint(5, 10)
-    #     y -= np.random.randint(l - 20, l)
-    #     b = np.random.randint(y - 75, y + 75)
-    #     s -= np.random.randint(20, 50)
-    #
-    #     # choose local extents
-    #     # set range for max/min values of x and y
-    #     h = d + f
-    #     w = 2 * p
-    #     ymin = b - d  # affects max/min size of the bars
-    #     ymax = b + f
-    #     xmin = max(0, x - int(w // 2))
-    #     xmax = min(spec.shape[1], x + int(w // 2))
-    #
-    #     yy = np.arange(ymin, ymax)[:, None]  # for gauss equation
-    #     xx = np.arange(xmin, xmax)[None, :]
-    #     Y = yy - b
-    #     X = xx - x
-    #
-    #     # anisotropic Gaussian sigma (controls vertical/horizontal spread)
-    #     sigma_y = max(3.0, h * 0.25)
-    #     sigma_x = max(1.0, w * 0.5)
-    #
-    #     gauss = np.exp(-0.5 * ((Y / sigma_y) ** 2 + (X / sigma_x) ** 2))
-    #
-    #     # add scaled gaussian
-    #     spec[ymin:ymax, xmin:xmax] += 20.0 * gauss  # tune amplitude
-    #
-    #
-    #     if s < np.random.randint(1500,1600):    # the lines stop decreasing
-    #         break
-
-
     for j in range(0, 3): # generates up to three radio signal lines
         t = np.arange(1000) * 0.1
 
@@ -158,114 +109,9 @@ def generate_noise():
     plt.ylim(17000,24000)   # plot range of 17000-24000
 
     plt.imshow(spec, origin = 'lower', aspect = 'auto')
+    plt.xlabel('Time (s)')
+    plt.ylabel('Frequency (kHz)')
     plt.title(f'Io-B: Factor {factor}')
-    plt.colorbar()
-    plt.show()
-
-generate_noise() # call the function
-
-
-
-
-
-
-
-
-        t += np.random.randint(5, 10) * factor  # each bar moves over a random amount on the x axis
-        p = np.random.randint(1, 4) * factor    # thickness of the bar
-        # length of the bar along y axis
-        d += 4 * factor # changes the lower step length of the line
-        f += 20 * factor    # changes the upper step length of the line
-        s += np.random.randint(30, 60)  # increase in the cut off point
-        l = np.random.randint(5, 10)
-        y += np.random.randint(l, l + 10)   # adds upward trend to the bars
-        b = np.random.randint(y - 75, y + 75)   # adds randomization
-
-        # choose local extents
-        h = d + f   # sets the range for what y and x min/max can have
-        w = 2 * p
-        ymin = max(0, b - int(h // 2))  # affects the max size of the bars (x and y)
-        ymax = min(spec.shape[0], b + int(h // 2))
-        xmin = max(0, x - int(w // 2))
-        xmax = min(spec.shape[1], x + int(w // 2))
-
-        yy = np.arange(ymin, ymax)[:, None] # for gauss equation
-        xx = np.arange(xmin, xmax)[None, :]
-        Y = yy - b
-        X = xx - x
-
-        # anisotropic Gaussian sigma (controls vertical/horizontal spread)
-        sigma_y = max(3.0, h * 0.25)
-        sigma_x = max(1.0, w * 0.5)
-
-        gauss = np.exp(-0.5 * ((Y / sigma_y) ** 2 + (X / sigma_x) ** 2))
-
-        # add scaled gaussian
-        spec[ymin:ymax, xmin:xmax] += 20.0 * gauss  # tune amplitude
-
-
-        if s > 2000:    # bars stop increasing
-           break
-
-    for w in range(100):    # bars start to decrease in size
-        # same things as the increasing section but -= instead of += to decrease the bar size
-        d -= 10 * factor
-        f -= 40 * factor
-        x = np.random.randint(t, t + 5)
-        t += np.random.randint(5, 10) * factor
-        p = np.random.randint(1, 4) * factor
-        l = np.random.randint(5, 10)
-        y -= np.random.randint(l - 20, l)
-        b = np.random.randint(y - 75, y + 75)
-        s -= np.random.randint(20, 50)
-
-        # choose local extents
-        h = d + f
-        w = 2 * p
-        ymin = max(0, b - int(h // 2))
-        ymax = min(spec.shape[0], b + int(h // 2))
-        xmin = max(0, x - int(w // 2))
-        xmax = min(spec.shape[1], x + int(w // 2))
-
-        yy = np.arange(ymin, ymax)[:, None]
-        xx = np.arange(xmin, xmax)[None, :]
-        Y = yy - b
-        X = xx - x
-
-        # anisotropic Gaussian sigma (controls vertical/horizontal spread)
-        sigma_y = max(3.0, h * 0.25)
-        sigma_x = max(1.0, w * 0.5)
-
-        gauss = np.exp(-0.5 * ((Y / sigma_y) ** 2 + (X / sigma_x) ** 2))
-
-        # add scaled gaussian
-        spec[ymin:ymax, xmin:xmax] += 20.0 * gauss  # tune amplitude
-
-
-        if s < np.random.randint(1500,1600):    # the lines stop decreasing
-            break
-
-
-    for j in range(0, 3): # generates up to three radio signal lines
-        t = np.arange(1000) * 0.1
-
-        a = np.random.randint(17500, 18250) # random bar in the range
-        b = a + 50  # thickness of the line
-
-        c = np.random.randint(21000, 22000) # random bar in the range
-        d = c + 50  # thickness of the line
-
-
-        if np.random.rand() < 0.35: # random sin function with in ranges for intensity
-            spec[a:b, :] += np.random.randint(4,14) + np.sin(np.random.randint(2, 5) * t)
-
-        if np.random.rand() < 0.35: # random sin function with in ranges for intensity
-            spec[c:d, :] += np.random.randint(4,14) + np.sin(np.random.randint(2, 5) * t)
-
-    plt.ylim(17000,24000)   # plot range of 17000-24000
-
-    plt.imshow(spec, origin = 'lower', aspect = 'auto')
-    plt.title('Io-B')
     plt.colorbar()
     plt.show()
 
